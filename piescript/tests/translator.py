@@ -12,7 +12,7 @@ def add(a, b):
 """
 
         expected = "pyFunction([[\"\", \"a\", undefined], [\"\", \"b\", undefined]], " \
-                   "function([\"a\", \"b\"]) {  }"
+                   "function(a, b) {  }"
 
         self.assertEqual(expected, translator.compile(code))
 
@@ -23,6 +23,6 @@ def add(a, b=1, c=2):
 """
 
         expected = "pyFunction([[\"\", \"a\", undefined], [\"\", \"b\", __.pyNumber(1)], " \
-                   "[\"\", \"c\", __.pyNumber(2)]], function([\"a\", \"b\", \"c\"]) {  }"
+                   "[\"\", \"c\", __.pyNumber(2)]], function(a, b, c) {  }"
 
         self.assertEqual(expected, translator.compile(code))

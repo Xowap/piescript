@@ -43,7 +43,7 @@ def handle_function_def(node, scope):
         for i in range(0, len(args.defaults)):
             js_args[offset + i][-1] = handle(args.defaults[-i], scope)
 
-        return Literal(dumps(js_args)), names
+        return Literal(dumps(js_args)), Literal(", ".join(names))
 
     scope.add(node.name)
 
