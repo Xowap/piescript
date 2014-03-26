@@ -1,0 +1,11 @@
+# vim: fileencoding=utf-8 tw=100 expandtab ts=4 sw=4 :
+#
+# PieScript
+# (c) 2014 Rémy Sanchez <remy.sanchez@activkonnect.com>
+
+from piescript import translator
+import fileinput
+
+
+script = "".join(fileinput.input())
+print(translator.translate(script))

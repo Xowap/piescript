@@ -20,7 +20,7 @@ add = __.pyFunction([["", "a", undefined], ["", "b", undefined]], function (a, b
 });
 """
 
-        self.assertEqual(expected, translator.compile(code))
+        self.assertEqual(expected, translator.translate(code))
 
     def test_simple_function_with_default(self):
         code = """
@@ -32,4 +32,4 @@ def add(a, b=1, c=2):
 add = __.pyFunction([["", "a", undefined], ["", "b", __.pyInt(1)], ["", "c", __.pyInt(2)]], function (a, b, c) {});
 """
 
-        self.assertEqual(expected, translator.compile(code))
+        self.assertEqual(expected, translator.translate(code))

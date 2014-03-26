@@ -7,18 +7,25 @@
 
     var exceptions;
 
-    var PyNumber;
+    var PyInt;
 
     var makeException,
+        makeArgs,
         pyFunction,
-        pyNumber,
-        pyAdd;
+        pyInt,
+        pyOpAdd;
 
     makeException = function (name, defaultMessage) {
         return new Function('message', 'this.constructor.prototype.__proto__ = Error.prototype;\n' +
             'Error.captureStackTrace(this, this.constructor);\n' +
             'this.name = this.constructor.name;\n' +
             'this.message = message || ' + JSON.stringify((defaultMessage)) + ';');
+    };
+
+    makeArgs = function (args) {
+        return {
+            args: args
+        };
     };
 
     pyFunction = function (argsDesc, func) {
@@ -46,7 +53,7 @@
         }
     };
 
-    PyNumber = function (number) {
+    PyInt = function (number) {
         var that = this,
             py___add__;
 
@@ -58,18 +65,20 @@
         });
 
         that.value = number;
+        that.py___class__ = {py___name__: 'int'}
         that.py___add__ = py___add__;
     };
 
-    pyNumber = function (number) {
-        return new PyNumber(number);
+    pyInt = function (number) {
+        return new PyInt(number);
     };
 
-    pyAdd = function (a, b) {
-        if (a instanceof PyNumber && b instanceof PyNumber) {
-            return a.py___add__(b);
+    pyOpAdd = function (a, b) {
+        if (a.hasOwnProperty('py___add__')) {
+            return a.py___add__(makeArgs(a, b));
         } else {
-            throw new exceptions.NotImplementedError('You can\'t add anything else than numbers');
+            throw new exceptions.NotImplementedError('Type ' + a.py___class__.py___name__ +
+                ' does not implement addition.');
         }
     };
 
@@ -82,7 +91,8 @@
 
     exports.exceptions = exceptions;
 
+    exports.makeArgs = makeArgs;
     exports.pyFunction = pyFunction;
-    exports.pyNumber = pyNumber;
-    exports.pyAdd = pyAdd;
+    exports.pyInt = pyInt;
+    exports.pyOpAdd = pyOpAdd;
 }(exports));
