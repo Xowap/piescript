@@ -61,7 +61,13 @@
             ['', 'self', undefined],
             ['', 'other', undefined]
         ], function (self, other) {
-            return pyNumber(self.value + other.value);
+            if (other instanceof PyInt) {
+                return pyInt(self.value + other.value);
+            } else {
+                throw new exceptions.TypeError('"+" operator does not exist between'
+                    + '"' + self.py___class__.py___name__ + '" and '
+                    + '"' + other.py___class__.py___name__ + '"')
+            }
         });
 
         that.value = number;
@@ -75,7 +81,7 @@
 
     pyOpAdd = function (a, b) {
         if (a.hasOwnProperty('py___add__')) {
-            return a.py___add__(makeArgs(a, b));
+            return a.py___add__(makeArgs([a, b]));
         } else {
             throw new exceptions.NotImplementedError('Type ' + a.py___class__.py___name__ +
                 ' does not implement addition.');
