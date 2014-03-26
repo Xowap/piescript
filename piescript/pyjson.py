@@ -8,10 +8,13 @@ _real_encode_basestring = _encoder.encode_basestring
 _real_encode_basestring_ascii = _encoder.encode_basestring_ascii
 
 
+# noinspection PyArgumentList,PyInitNewSignature
 class Literal(str):
-    # noinspection PyArgumentList
-    def __new__(cls, tpl, *args, **kwargs):
-        return str.__new__(cls, _render_literal(tpl, *args, **kwargs))
+    def __new__(cls, tpl, *args, noexpand=False, **kwargs):
+        if not noexpand:
+            return str.__new__(cls, _render_literal(tpl, *args, **kwargs))
+        else:
+            return str.__new__(cls, tpl)
 
 
 class JSONPyEncoder(JSONEncoder):

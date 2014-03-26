@@ -8,11 +8,17 @@ class TestTranslator(TestCase):
     def test_simple_function(self):
         code = """
 def add(a, b):
-    return a + b
+    c = 42
+    return a + b + c
 """
 
-        expected = "pyFunction([[\"\", \"a\", undefined], [\"\", \"b\", undefined]], " \
-                   "function(a, b) {  }"
+        expected = """var add;
+add = __.pyFunction([["", "a", undefined], ["", "b", undefined]], function (a, b) {
+    var c;
+    c = __.pyInt(42);
+    return __.pyOpAdd(__.pyOpAdd(a, b), c);
+});
+"""
 
         self.assertEqual(expected, translator.compile(code))
 
@@ -22,7 +28,8 @@ def add(a, b=1, c=2):
     pass
 """
 
-        expected = "pyFunction([[\"\", \"a\", undefined], [\"\", \"b\", __.pyNumber(1)], " \
-                   "[\"\", \"c\", __.pyNumber(2)]], function(a, b, c) {  }"
+        expected = """var add;
+add = __.pyFunction([["", "a", undefined], ["", "b", __.pyInt(1)], ["", "c", __.pyInt(2)]], function (a, b, c) {});
+"""
 
         self.assertEqual(expected, translator.compile(code))
